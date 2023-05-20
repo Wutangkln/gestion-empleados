@@ -1,30 +1,204 @@
 import tkinter as tk
 import customtkinter as ctk
+from PIL import Image, ImageFilter, ImageTk
 
 # from tkinter import *
 # from tkinter import messagebox
 
+
 class Ventana(ctk.CTk):
     def __init__(self):
         super().__init__()
-        # self.title("Gestion de colaboradores")
+        self.title("Acceso al sistema")
         self.geometry("300x450")
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
-        self.marco_login = Marco(self)
-        self.marco_login.grid(row=0, column=0, pady=20, padx=30, sticky='nsew')
-        self.marco_login.grid_rowconfigure(3, weight=1)
-        self.marco_login.grid_columnconfigure(0, weight=1)
+        self.marco_sesion = Marco_sesion(self)
+        self.marco_sesion.grid(row=0, column=0, pady=20, padx=30, sticky='nsew')
+        # configuramos la grilla del marco a 4 filas y 1 columna
+        self.marco_sesion.grid_rowconfigure(5, weight=1)
+        self.marco_sesion.grid_columnconfigure(0, weight=1)
 
-
-class Marco(ctk.CTkFrame):
+class Marco_sesion(ctk.CTkFrame):
     def __init__(self, master: any, **kwargs):
         super().__init__(master, **kwargs)
-    
-    def botones_login(self):
-        pass
+        self.botones_sesion()
 
+    def botones_sesion(self):
+        self.etiqueta_imagen = ctk.CTkLabel(
+            self, 
+            text="IMAGEN",
+            text_color=("gray70"),
+            font=ctk.CTkFont(size=18, weight="bold"))
+        self.etiqueta_imagen.grid(row=0, column=0, pady=30, padx=10)
+
+        self.etiqueta_titulo = ctk.CTkLabel(
+            self, 
+            text="Acceso al sistema",
+            fg_color=("gray50"), 
+            text_color=("gray70"), 
+            font=ctk.CTkFont(size=18, weight="bold"))
+        self.etiqueta_titulo.grid(row=1, column=0, pady=30, sticky="ew")
+
+        self.boton_inicio = ctk.CTkButton(
+            self, 
+            text="Iniciar Sesion",
+            height=40,
+            border_spacing=10,
+            fg_color="gray40",
+            text_color=("gray20"),
+            hover_color=("gray60"),
+            command=self.abrir_marco_inicio)
+        self.boton_inicio.grid(row=2, column=0, padx=15, pady=(30, 10), sticky="ew")
+
+        self.boton_registrase = ctk.CTkButton(
+            self, 
+            text="Registrarse",
+            height=40,
+            border_spacing=10,
+            fg_color="gray40",
+            text_color=("gray20"),
+            hover_color=("gray60"),
+            command=self.abrir_marco_registrarse)
+        self.boton_registrase.grid(row=3, column=0, padx=15, pady=10, sticky="ew")
+        
+        self.boton_registrase = ctk.CTkButton(
+            self, 
+            text="Salir",
+            height=15,
+            width=25,
+            border_spacing=10,
+            fg_color="gray40",
+            text_color=("gray20"),
+            hover_color=("gray60"),
+            command=lambda : self.quit())
+        self.boton_registrase.grid(row=5, column=0, padx=15, pady=(30, 10))
+
+    def abrir_marco_inicio(self):
+        self.marco_inicio = ctk.CTkToplevel()
+        self.marco_inicio.title("Inicio de sesion")
+        self.marco_inicio.geometry("300x450")
+        self.marco_inicio.attributes("-topmost", True)
+        self.marco_inicio.grab_set()
+        self.marco_inicio.grid_rowconfigure(0, weight=1)
+        self.marco_inicio.grid_columnconfigure(0, weight=1)
+
+        self.sub_marco_inicio = ctk.CTkFrame(self.marco_inicio)
+        self.sub_marco_inicio.grid(row=0, column=0, pady=20, padx=30, sticky="nsew")
+        self.sub_marco_inicio.grid_rowconfigure(7, weight=1)
+        self.sub_marco_inicio.grid_columnconfigure(0, weight=1)
+
+        self.etiqueta_titulo_inicio = ctk.CTkLabel(
+            self.sub_marco_inicio, 
+            text="Inicio de sesion",
+            fg_color=("gray50"), 
+            text_color=("gray70"), 
+            font=ctk.CTkFont(size=18, weight="bold"))
+        self.etiqueta_titulo_inicio.grid(row=0, column=0, pady=20, sticky="ew")
+
+        self.inicio_usuario = ctk.CTkLabel(
+            self.sub_marco_inicio, 
+            text="Nombre de usuario",
+            text_color=("gray70"), 
+            font=ctk.CTkFont(size=12))
+        self.inicio_usuario.grid(row=1, column=0, pady=(20, 10), sticky="ew")
+        self.input_inicio_usuario = ctk.CTkEntry(self.sub_marco_inicio)
+        self.input_inicio_usuario.grid(row=2, column=0, pady=(0, 10), padx=10)
+
+        self.inicio_clave = ctk.CTkLabel(
+            self.sub_marco_inicio, 
+            text="Clave de acceso",
+            text_color=("gray70"), 
+            font=ctk.CTkFont(size=12))
+        self.inicio_clave.grid(row=3, column=0, pady=(10, 0), sticky="ew")
+        self.input_inicio_clave = ctk.CTkEntry(self.sub_marco_inicio)
+        self.input_inicio_clave.grid(row=4, column=0, pady=(10, 30), padx=10)
+
+        self.sub_marco_boton_iniciar = ctk.CTkButton(
+            self.sub_marco_inicio, 
+            text="Iniciar sesion",
+            height=40,
+            border_spacing=10,
+            fg_color="gray40",
+            text_color=("gray20"),
+            hover_color=("gray60"))
+        self.sub_marco_boton_iniciar.grid(row=5, column=0, padx=15, pady=10, sticky="ew")
+
+        self.sub_marco_boton_salir = ctk.CTkButton(
+            self.sub_marco_inicio, 
+            text="Salir",
+            height=15,
+            width=25,
+            border_spacing=10,
+            fg_color="gray40",
+            text_color=("gray20"),
+            hover_color=("gray60"),
+            command=lambda : self.marco_inicio.destroy())
+        self.sub_marco_boton_salir.grid(row=6, column=0, padx=15, pady=10)
+
+
+    def abrir_marco_registrarse(self):
+        self.marco_registrarse = ctk.CTkToplevel()
+        self.marco_registrarse.title("Registrarse")
+        self.marco_registrarse.geometry("300x450")
+        self.marco_registrarse.attributes("-topmost", True)
+        self.marco_registrarse.grab_set()
+        self.marco_registrarse.grid_rowconfigure(0, weight=1)
+        self.marco_registrarse.grid_columnconfigure(0, weight=1)
+
+        self.sub_marco_registrarse = ctk.CTkFrame(self.marco_registrarse)
+        self.sub_marco_registrarse.grid(row=0, column=0, pady=20, padx=30, sticky="nsew")
+        self.sub_marco_registrarse.grid_rowconfigure(7, weight=1)
+        self.sub_marco_registrarse.grid_columnconfigure(0, weight=1)
+
+        self.etiqueta_titulo_registrarse = ctk.CTkLabel(
+            self.sub_marco_registrarse, 
+            text="Registrarse",
+            fg_color=("gray50"), 
+            text_color=("gray70"), 
+            font=ctk.CTkFont(size=18, weight="bold"))
+        self.etiqueta_titulo_registrarse.grid(row=0, column=0, pady=20, sticky="ew")
+    
+        self.registro_usuario = ctk.CTkLabel(
+            self.sub_marco_registrarse, 
+            text="Nombre de usuario",
+            text_color=("gray70"), 
+            font=ctk.CTkFont(size=12))
+        self.registro_usuario.grid(row=1, column=0, pady=(20, 10), sticky="ew")
+        self.input_registro_usuario = ctk.CTkEntry(self.sub_marco_registrarse)
+        self.input_registro_usuario.grid(row=2, column=0, pady=(0, 10), padx=10)
+
+        self.etiqueta_registro_clave = ctk.CTkLabel(
+            self.sub_marco_registrarse, 
+            text="Clave de acceso",
+            text_color=("gray70"), 
+            font=ctk.CTkFont(size=12))
+        self.etiqueta_registro_clave.grid(row=3, column=0, pady=(10, 0), sticky="ew")
+        self.input_registro_clave = ctk.CTkEntry(self.sub_marco_registrarse)
+        self.input_registro_clave.grid(row=4, column=0, pady=(10, 30), padx=10)
+
+        self.sub_marco_boton_registrarse = ctk.CTkButton(
+            self.sub_marco_registrarse, 
+            text="Registrate",
+            height=40,
+            border_spacing=10,
+            fg_color="gray40",
+            text_color=("gray20"),
+            hover_color=("gray60"))
+        self.sub_marco_boton_registrarse.grid(row=5, column=0, padx=15, pady=10, sticky="ew")
+
+        self.sub_marco_boton_salir = ctk.CTkButton(
+            self.sub_marco_registrarse, 
+            text="Salir",
+            height=15,
+            width=25,
+            border_spacing=10,
+            fg_color="gray40",
+            text_color=("gray20"),
+            hover_color=("gray60"),
+            command=lambda : self.marco_registrarse.destroy())
+        self.sub_marco_boton_salir.grid(row=6, column=0, padx=15, pady=10)
 
 
  
