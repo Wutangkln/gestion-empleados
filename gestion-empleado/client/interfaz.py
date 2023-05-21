@@ -14,13 +14,13 @@ class Ventana(ctk.CTk):
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
-        self.marco_sesion = Marco_sesion(self)
+        self.marco_sesion = Inicio_sesion(self)
         self.marco_sesion.grid(row=0, column=0, pady=20, padx=30, sticky='nsew')
         # configuramos la grilla del marco a 4 filas y 1 columna
         self.marco_sesion.grid_rowconfigure(5, weight=1)
         self.marco_sesion.grid_columnconfigure(0, weight=1)
 
-class Marco_sesion(ctk.CTkFrame):
+class Inicio_sesion(ctk.CTkFrame):
     def __init__(self, master: any, **kwargs):
         super().__init__(master, **kwargs)
         self.botones_sesion()
@@ -78,7 +78,7 @@ class Marco_sesion(ctk.CTkFrame):
     def abrir_marco_inicio(self):
         self.marco_inicio = ctk.CTkToplevel()
         self.marco_inicio.title("Inicio de sesion")
-        self.marco_inicio.geometry("300x450")
+        self.marco_inicio.geometry("300x470")
         self.marco_inicio.attributes("-topmost", True)
         self.marco_inicio.grab_set()
         self.marco_inicio.grid_rowconfigure(0, weight=1)
@@ -123,7 +123,7 @@ class Marco_sesion(ctk.CTkFrame):
             font=("Arial", 12),
             variable=self.vista_var,
             command=self.vista_clave_inicio,)
-        self.vista_clave.grid(row=5, column=0, padx=(10, 30)) 
+        self.vista_clave.grid(row=5, column=0, padx=10, pady=(10, 10)) 
 
         self.sub_marco_boton_iniciar = ctk.CTkButton(
             self.sub_marco_inicio, 
@@ -151,7 +151,7 @@ class Marco_sesion(ctk.CTkFrame):
     def abrir_marco_registrarse(self):
         self.marco_registrarse = ctk.CTkToplevel()
         self.marco_registrarse.title("Registrarse")
-        self.marco_registrarse.geometry("300x550")
+        self.marco_registrarse.geometry("400x600")
         self.marco_registrarse.attributes("-topmost", True)
         self.marco_registrarse.grab_set()
         self.marco_registrarse.grid_rowconfigure(0, weight=1)
@@ -159,8 +159,8 @@ class Marco_sesion(ctk.CTkFrame):
 
         self.sub_marco_registrarse = ctk.CTkFrame(self.marco_registrarse)
         self.sub_marco_registrarse.grid(row=0, column=0, pady=20, padx=30, sticky="nsew")
-        self.sub_marco_registrarse.grid_rowconfigure(10, weight=1)
-        self.sub_marco_registrarse.grid_columnconfigure(0, weight=1)
+        self.sub_marco_registrarse.grid_rowconfigure(13, weight=1)
+        self.sub_marco_registrarse.grid_columnconfigure(1, weight=1)
 
         self.etiqueta_titulo_registrarse = ctk.CTkLabel(
             self.sub_marco_registrarse, 
@@ -168,16 +168,16 @@ class Marco_sesion(ctk.CTkFrame):
             fg_color=("gray50"), 
             text_color=("gray70"), 
             font=ctk.CTkFont(size=18, weight="bold"))
-        self.etiqueta_titulo_registrarse.grid(row=0, column=0, pady=20, sticky="ew")
+        self.etiqueta_titulo_registrarse.grid(row=0, column=0, columnspan=2, pady=20, sticky="ew")
     
         self.registro_usuario = ctk.CTkLabel(
             self.sub_marco_registrarse, 
             text="Nombre de usuario",
             text_color=("gray70"), 
             font=ctk.CTkFont(size=12))
-        self.registro_usuario.grid(row=1, column=0, pady=(20, 10), sticky="ew")
+        self.registro_usuario.grid(row=1, column=0, columnspan=2, pady=(20, 10), sticky="ew")
         self.input_registro_usuario = ctk.CTkEntry(self.sub_marco_registrarse)
-        self.input_registro_usuario.grid(row=2, column=0, pady=(0, 10), padx=10)
+        self.input_registro_usuario.grid(row=2, column=0, columnspan=2, pady=(0, 10), padx=17, sticky="ew")
 
         self.etiqueta_registro_clave = ctk.CTkLabel(
             self.sub_marco_registrarse, 
@@ -188,13 +188,30 @@ class Marco_sesion(ctk.CTkFrame):
         self.input_registro_clave = ctk.CTkEntry(self.sub_marco_registrarse, show="•")
         self.input_registro_clave.grid(row=4, column=0, pady=(10, 10), padx=10)
         
-        self.vista_var = ctk.BooleanVar()
-        self.vista_clave = ctk.CTkCheckBox(
+        self.primera_clave_var = ctk.BooleanVar()
+        self.primera_vista_clave = ctk.CTkCheckBox(
             self.sub_marco_registrarse,
             text="Mostrar clave",
-            variable=self.vista_var,
+            variable=self.primera_clave_var,
             command=self.vista_clave_registrarse)
-        self.vista_clave.grid(row=5, column=0, padx=(10, 10)) 
+        self.primera_vista_clave.grid(row=4, column=1, padx=20, pady=(10, 10)) 
+
+        self.etiqueta_repetir_clave = ctk.CTkLabel(
+            self.sub_marco_registrarse, 
+            text="Repite la clave",
+            text_color=("gray70"), 
+            font=ctk.CTkFont(size=12))
+        self.etiqueta_repetir_clave.grid(row=6, column=0, pady=(10, 0), sticky="ew")
+        self.input_repetir_clave = ctk.CTkEntry(self.sub_marco_registrarse, show="•")
+        self.input_repetir_clave.grid(row=7, column=0, pady=(10, 10), padx=10)
+        
+        self.segunda_clave_var = ctk.BooleanVar()
+        self.segunda_vista_clave = ctk.CTkCheckBox(
+            self.sub_marco_registrarse,
+            text="Mostrar clave",
+            variable=self.segunda_clave_var,
+            command=self.vista_clave_registrarse)
+        self.segunda_vista_clave.grid(row=7, column=1, padx=20, pady=(10, 10)) 
 
         self.valores = ["Administrador","Normal"]
         self.etiqueta_registro_perfil = ctk.CTkLabel(
@@ -202,7 +219,7 @@ class Marco_sesion(ctk.CTkFrame):
             text="Tipo de perfil",
             text_color=("gray70"), 
             font=ctk.CTkFont(size=12))
-        self.etiqueta_registro_perfil.grid(row=6, column=0, pady=(10, 0), sticky="ew")
+        self.etiqueta_registro_perfil.grid(row=9, column=0, columnspan=2, pady=(10, 0), sticky="ew")
         self.input_registro_perfil = ctk.CTkOptionMenu(
             self.sub_marco_registrarse, 
             values=self.valores,
@@ -211,7 +228,7 @@ class Marco_sesion(ctk.CTkFrame):
             button_hover_color="gray60",
             dropdown_hover_color="gray60",
             button_color="gray40")
-        self.input_registro_perfil.grid(row=7, column=0, pady=(10, 30), padx=10)
+        self.input_registro_perfil.grid(row=10, column=0, columnspan=2, pady=(10, 30), padx=10)
 
         self.sub_marco_boton_registrarse = ctk.CTkButton(
             self.sub_marco_registrarse, 
@@ -221,7 +238,7 @@ class Marco_sesion(ctk.CTkFrame):
             fg_color="gray40",
             text_color=("gray20"),
             hover_color=("gray60"))
-        self.sub_marco_boton_registrarse.grid(row=8, column=0, padx=15, pady=10, sticky="ew")
+        self.sub_marco_boton_registrarse.grid(row=11, column=0, columnspan=2, padx=15, pady=10, sticky="ew")
 
         self.sub_marco_boton_salir = ctk.CTkButton(
             self.sub_marco_registrarse, 
@@ -233,16 +250,21 @@ class Marco_sesion(ctk.CTkFrame):
             text_color=("gray20"),
             hover_color=("gray60"),
             command=lambda : self.marco_registrarse.destroy())
-        self.sub_marco_boton_salir.grid(row=9, column=0, padx=15, pady=10)
+        self.sub_marco_boton_salir.grid(row=12, column=0, columnspan=2, padx=15, pady=10)
 
     def vista_clave_registrarse(self):
-        self.vista = self.vista_var.get()
-        if self.vista:
-            print(self.vista)
+        primera_vista = self.primera_clave_var.get()
+        segunda_vista = self.segunda_clave_var.get()
+
+        if primera_vista:
             self.input_registro_clave.configure(show="")
         else:
-            print(self.vista)
             self.input_registro_clave.configure(show="•")
+            
+        if segunda_vista:
+            self.input_repetir_clave.configure(show="")
+        else:
+            self.input_repetir_clave.configure(show="•")
     
     def vista_clave_inicio(self):
         self.vista = self.vista_var.get()
