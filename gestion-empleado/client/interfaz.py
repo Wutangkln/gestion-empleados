@@ -104,7 +104,7 @@ class Inicio_sesion(ctk.CTkFrame):
             font=ctk.CTkFont(size=12))
         self.inicio_usuario.grid(row=1, column=0, pady=(20, 10), sticky="ew")
         self.input_inicio_usuario = ctk.CTkEntry(self.sub_marco_inicio)
-        self.input_inicio_usuario.grid(row=2, column=0, pady=(0, 10), padx=10)
+        self.input_inicio_usuario.grid(row=2, column=0, pady=(0, 10), padx=10, sticky="ew")
 
         self.inicio_clave = ctk.CTkLabel(
             self.sub_marco_inicio, 
@@ -113,7 +113,7 @@ class Inicio_sesion(ctk.CTkFrame):
             font=ctk.CTkFont(size=12))
         self.inicio_clave.grid(row=3, column=0, pady=(10, 0), sticky="ew")
         self.input_inicio_clave = ctk.CTkEntry(self.sub_marco_inicio, show="•")
-        self.input_inicio_clave.grid(row=4, column=0, pady=(10, 10), padx=10)
+        self.input_inicio_clave.grid(row=4, column=0, pady=(10, 10), padx=10, sticky="ew")
 
         self.vista_var = ctk.BooleanVar()
         self.vista_clave = ctk.CTkCheckBox(
@@ -177,7 +177,7 @@ class Inicio_sesion(ctk.CTkFrame):
             font=ctk.CTkFont(size=12))
         self.registro_usuario.grid(row=1, column=0, columnspan=2, pady=(20, 10), sticky="ew")
         self.input_registro_usuario = ctk.CTkEntry(self.sub_marco_registrarse)
-        self.input_registro_usuario.grid(row=2, column=0, columnspan=2, pady=(0, 10), padx=17, sticky="ew")
+        self.input_registro_usuario.grid(row=2, column=0, columnspan=2, pady=(0, 10), padx=10, sticky="ew")
 
         self.etiqueta_registro_clave = ctk.CTkLabel(
             self.sub_marco_registrarse, 
@@ -186,7 +186,7 @@ class Inicio_sesion(ctk.CTkFrame):
             font=ctk.CTkFont(size=12))
         self.etiqueta_registro_clave.grid(row=3, column=0, pady=(10, 0), sticky="ew")
         self.input_registro_clave = ctk.CTkEntry(self.sub_marco_registrarse, show="•")
-        self.input_registro_clave.grid(row=4, column=0, pady=(10, 10), padx=10)
+        self.input_registro_clave.grid(row=4, column=0, pady=(10, 10), padx=10, sticky="ew")
         
         self.primera_clave_var = ctk.BooleanVar()
         self.primera_vista_clave = ctk.CTkCheckBox(
@@ -203,7 +203,7 @@ class Inicio_sesion(ctk.CTkFrame):
             font=ctk.CTkFont(size=12))
         self.etiqueta_repetir_clave.grid(row=6, column=0, pady=(10, 0), sticky="ew")
         self.input_repetir_clave = ctk.CTkEntry(self.sub_marco_registrarse, show="•")
-        self.input_repetir_clave.grid(row=7, column=0, pady=(10, 10), padx=10)
+        self.input_repetir_clave.grid(row=7, column=0, pady=(10, 10), padx=10, sticky="ew")
         
         self.segunda_clave_var = ctk.BooleanVar()
         self.segunda_vista_clave = ctk.CTkCheckBox(
@@ -269,10 +269,8 @@ class Inicio_sesion(ctk.CTkFrame):
     def vista_clave_inicio(self):
         self.vista = self.vista_var.get()
         if self.vista:
-            print(self.vista)
             self.input_inicio_clave.configure(show="")
         else:
-            print(self.vista)
             self.input_inicio_clave.configure(show="•")
 
 
