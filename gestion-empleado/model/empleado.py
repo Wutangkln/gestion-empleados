@@ -1,3 +1,6 @@
+# Este fichero incluye toda la informacion relevante para los objetos empleados
+# que luego se ingresaran a la base de datos
+
 class InformacionPersonal():
     def __init__(self, nombre, rut, sexo, direccion, telefono):
         self.nombre = nombre

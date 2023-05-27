@@ -12,12 +12,12 @@ class Conexion():
             )
             print("Conexion establecida con la base de datos:", database)
         
-        except mysql.connector.Error as err:
-            print(f"Algo ha salido mal con la conexion, error: {err}")
+        except mysql.connector.Error as error:
+            print(f"Algo ha salido mal con la conexion, error: {error}")
 
         finally:
             conexion.close()
-            print("conexion cerrarda")
+            print("La conexion con la base de datos ha sido cerrada correctamente.")
 
     def creacion_tablas(self):
         pass

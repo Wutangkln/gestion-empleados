@@ -2,7 +2,7 @@ from .empleado import InformacionPersonal, InformacionLaboral, ContactoEmergenci
 
 class Formulario:
     def recoger_informacion_personal(self):
-        print("INFORMACION PERSONAL:")
+        print("\nINFORMACION PERSONAL:")
         nombre = input("Ingresa el nombre completo: ")
         rut = input("Ingresa el RUT (12345678-9): ")
         sexo = input("Ingresa el sexo: ")
@@ -34,7 +34,13 @@ class Formulario:
     def recoger_carga_familiar(self):
         print("CARGAS FAMILIARES:")
         cargas = []
-        numero_cargas = int(input("Ingresa el numero de cargas familiares: "))
+
+        while True:
+            try:
+                numero_cargas = int(input("Ingresa el numero de cargas familiares: "))
+                break
+            except ValueError:
+                print("No ingresaste un numero valido. Por favor, intenta otra vez.")
 
         for i in range(numero_cargas):
             nombre = input("Ingresa el nombre completo: ")

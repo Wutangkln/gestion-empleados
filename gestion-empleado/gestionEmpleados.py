@@ -1,10 +1,12 @@
 from client.interfaz import Ventana
+
 from model.formulario import Formulario
 from model.empleado import Empleado
 
-
-
 def main():
+
+    # app.mainloop()
+    # app = Ventana()
     
     def agregar_empleado():
         formulario = Formulario()
@@ -19,8 +21,5 @@ def main():
 
     agregar_empleado()
 
-    # app = Ventana()
-    # app.mainloop()
-    
 if __name__ == '__main__':
     main()
