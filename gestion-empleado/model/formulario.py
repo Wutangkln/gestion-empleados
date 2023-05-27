@@ -1,4 +1,5 @@
 from .empleado import InformacionPersonal, InformacionLaboral, ContactoEmergencia, CargaFamiliar
+from .usuario import Usuario
 
 class Formulario:
     def recoger_informacion_personal(self):
@@ -52,3 +53,24 @@ class Formulario:
             cargas.append(carga)
 
         return cargas
+    
+    def recoger_informacion_usuario(self):
+        print("CREACION DEL PERFIL")
+        nombre_usuario = input("Ingresa el nombre de usuario: ")
+        clave = input("Ingresa la clave de acceso: ")
+
+        while True:
+            tipo_perfil = input("Ingresa el tipo de perfil(administrador o normal): ")
+            
+            if tipo_perfil in ["administrador", "normal"]:
+                break
+            else:
+                print("Debes ingresar alguna de las opciones indicadas. intentalo otra vez.")
+        
+        usuario = Usuario(nombre_usuario, clave, tipo_perfil)
+
+        return usuario
+
+
+
+

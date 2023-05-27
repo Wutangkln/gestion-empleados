@@ -19,7 +19,15 @@ def main():
         nuevo_empleado = Empleado(info_personal, info_laboral, contacto_emergencia, carga_familiar)
         nuevo_empleado.mostrar_informacion()
 
+    def crear_perfil():
+        formulario = Formulario()
+
+        usuario = formulario.recoger_informacion_usuario()
+
+        print(f"\nUsuario: {usuario.usuario} \nTipo de perfil: {usuario.tipo_perfil} \nCreado exitosamente.")
+
     agregar_empleado()
+    crear_perfil()
 
 if __name__ == '__main__':
     main()

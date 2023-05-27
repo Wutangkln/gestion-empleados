@@ -9,27 +9,27 @@ class InformacionPersonal():
         self.direccion = direccion
         self.telefono = telefono
 
-class InformacionLaboral():
+class InformacionLaboral:
     def __init__(self, cargo, area, departamento, fecha_ingreso):
         self.cargo = cargo
         self.area = area
         self.departamento = departamento
         self.fecha_ingreso = fecha_ingreso
 
-class ContactoEmergencia():
+class ContactoEmergencia:
     def __init__(self, nombre, telefono, relacion):
         self.nombre = nombre
         self.telefono = telefono
         self.relacion = relacion
 
-class CargaFamiliar():
+class CargaFamiliar:
     def __init__(self, nombre, rut, sexo, parentesco):
         self.nombre = nombre
         self.rut = rut
         self.sexo = sexo
         self.parentesco = parentesco
 
-class Empleado():
+class Empleado:
     def __init__(self, info_personal, info_laboral, contacto_emergencia, cargas_familiares):
         self.info_personal = info_personal
         self.info_laboral = info_laboral
