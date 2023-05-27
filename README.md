@@ -1,2 +1,2 @@
 # gestion-empleados
-Estructura de MVC
+Estructura para organizar los directorios: Patron MVC
