@@ -12,20 +12,6 @@ def mostrar_menu_inicio():
 
     print(menu)
 
-def mostrar_menu_gestion():
-    menu = '''
---- Gestion de empleados ---
-
-1. Lista de empleados
-2. Actualizar un empleado
-3. Eliminar un empleado
-4. cerrar el programa
-
-----------------------------
-'''
-
-    print(menu)
-
 def obtener_opcion():
     opcion = input("\n Escoge una opcion: ")
     
@@ -48,8 +34,30 @@ def menu_registro():
     rut_empleado = input("Ingresa tu rut: ")
     clave = input("Escoge una clave de acceso: ")
     clave_repetida = input("Ingresa la clave de acceso otra vez: ")
-    tipo_perfil = input("Ingresa el tipo de perfil [administrador, normal]: ")
+    while True:
+            tipo_perfil = input("Ingresa el tipo de perfil [administrador, normal]: ")
+            
+            if tipo_perfil in ["administrador", "normal"]:
+                break
+            else:
+                print("Debes ingresar alguna de las opciones indicadas. intentalo otra vez.")
 
     print("\n-----------------------------")
 
     return nombre_usuario, rut_empleado, clave, clave_repetida, tipo_perfil
+
+def mostrar_menu_gestion():
+    menu = '''
+
+--- Gestion de empleados ---
+
+1. Lista de empleados
+2. Agregar empleado
+3. Eliminar un empleado
+4. Actualizar un empleado
+5. Crear perfil a empleado
+6. cerrar la sesion
+
+----------------------------
+'''
+    print(menu)

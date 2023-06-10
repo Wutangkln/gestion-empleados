@@ -1,7 +1,11 @@
-from .empleado import InformacionPersonal, InformacionLaboral, ContactoEmergencia, CargaFamiliar
+from .empleado import InformacionPersonal, InformacionLaboral, ContactoEmergencia, CargaFamiliar, Empleado
 from .usuario import Usuario
 
-class Formulario:
+from client.interfaz import menu_registro
+
+import datetime
+
+class RecopilarDatos:
     def recoger_informacion_personal(self):
         print("\nINFORMACION PERSONAL:")
         nombre = input("Ingresa el nombre completo: ")
@@ -18,7 +22,8 @@ class Formulario:
         area = input("Ingresa el area del empleado: ")
         departamento = input("Ingresa el departamento del empleado: ")
         cargo = input("Ingresa el cargo del empleado: ")
-        fecha_ingreso = input("Ingresa la fecha de ingreso a la empresa: ")
+        fecha_ingreso_str = input("Ingresa la fecha de ingreso a la empresa [YYYY-MM-DD]: ")
+        fecha_ingreso = datetime.datetime.strptime(fecha_ingreso_str, '%Y-%m-%d').date()
         print("\n")
 
         return InformacionLaboral(cargo, area, departamento, fecha_ingreso)
@@ -55,21 +60,15 @@ class Formulario:
         return cargas
     
     def recoger_informacion_usuario(self):
-        print("CREACION DEL PERFIL")
-        nombre_usuario = input("Ingresa el nombre de usuario: ")
-        clave = input("Ingresa la clave de acceso: ")
-
-        while True:
-            tipo_perfil = input("Ingresa el tipo de perfil(administrador o normal): ")
-            
-            if tipo_perfil in ["administrador", "normal"]:
-                break
-            else:
-                print("Debes ingresar alguna de las opciones indicadas. intentalo otra vez.")
+        nombre_usuario, rut_empleado, clave, clave_repetida, tipo_perfil = menu_registro()
+        if clave != clave_repetida:
+            return "Las claves de acceso no coinciden."
+        else:
+            id_empleado = Empleado.obtener_id(rut_empleado)
         
-        usuario = Usuario(nombre_usuario, clave, tipo_perfil)
+            usuario = Usuario(nombre_usuario, clave, tipo_perfil)
 
-        return usuario
+        return usuario, id_empleado
 
 
 
