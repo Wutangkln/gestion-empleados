@@ -2,6 +2,7 @@
 # que luego se ingresaran a la base de datos
 
 from .conexion import Conexion
+import mysql
 
 class InformacionPersonal():
     def __init__(self, nombre, rut, sexo, direccion, telefono):
@@ -72,6 +73,7 @@ class Empleado:
         print("ENTRO AL METODO INGRESAR_INFORMACION")
         try:
             conexion = Conexion()
+            conexion.cursor.execute("USE empleados")
 
             # insersion de datos a la tabla empleado
             insertar_comando = "INSERT INTO empleados(nombre, rut, sexo, direccion, telefono) VALUES(%s, %s, %s, %s, %s)"
@@ -126,11 +128,40 @@ class Empleado:
         finally:
             conexion.cerrar_conexion()
 
+    def mostrar_lista_empleados():
+        try:
+            conexion = Conexion()
+            conexion.cursor.execute("USE empleados")
+            query = """
+            SELECT e.nombre, e.rut, e.sexo, c.nombre_cargo
+            FROM empleados e
+            INNER JOIN informacion_laboral il ON e.id_empleado = il.id_empleado
+            INNER JOIN departamento d ON il.id_informacion_laboral = d.id_informacion_laboral
+            INNER JOIN area a ON d.id_departamento = a.id_departamento
+            INNER JOIN cargo c ON a.id_area = c.id_area
+            """
+            conexion.cursor.execute(query)
+            empleados = conexion.cursor.fetchall()
+
+            if empleados:
+                print("--- Lista de Empleados ---")
+                for empleado in empleados:
+                    print(f"Nombre: {empleado[0]} | RUT: {empleado[1]} | Sexo: {empleado[2]} | Cargo: {empleado[3]}")
+                print("----------------------------")
+            else:
+                print("No hay empleados registrados en el sistema, por favor reintente más tarde.")
+
+            conexion.cerrar_conexion()
+
+        except mysql.connector.Error as err:
+            print(f"Algo salió mal: {err}")
+
     @staticmethod
     def obtener_id(rut):
         conexion = Conexion()
         
         try:
+            conexion.cursor.execute("USE empleados")
             conexion.cursor.execute("SELECT id_empleado FROM empleados WHERE rut = %s", (rut,))
             id_filtrado = conexion.cursor.fetchone()
 
