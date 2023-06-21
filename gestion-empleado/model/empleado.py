@@ -92,13 +92,13 @@ class Empleado:
             conexion.cursor.execute(insertar_comando, valores_empleado)
             self.id_departamento = conexion.cursor.lastrowid
             
-            insertar_comando = "INSERT INTO area(nombre_area, id_departamento) VALUES(%s, %s)"
-            valores_empleado = (self.info_laboral.area, self.id_departamento)
+            insertar_comando = "INSERT INTO area(nombre_area, id_departamento, id_empleado) VALUES(%s, %s, %s)"
+            valores_empleado = (self.info_laboral.area, self.id_departamento, self.id_empleado)
             conexion.cursor.execute(insertar_comando, valores_empleado)
             self.id_area = conexion.cursor.lastrowid
             
-            insertar_comando = "INSERT INTO cargo(nombre_cargo, id_area) VALUES(%s, %s)"
-            valores_empleado = (self.info_laboral.cargo, self.id_area)
+            insertar_comando = "INSERT INTO cargo(nombre_cargo, id_area, id_empleado) VALUES(%s, %s, %s)"
+            valores_empleado = (self.info_laboral.cargo, self.id_area, self.id_empleado)
             conexion.cursor.execute(insertar_comando, valores_empleado)
 
             # insersion de datos a la tabla contacto de emergencia
@@ -132,7 +132,7 @@ class Empleado:
         try:
             conexion = Conexion()
             conexion.cursor.execute("USE empleados")
-            query = """
+            mostrar_comando = """
             SELECT e.nombre, e.rut, e.sexo, c.nombre_cargo
             FROM empleados e
             INNER JOIN informacion_laboral il ON e.id_empleado = il.id_empleado
@@ -140,7 +140,7 @@ class Empleado:
             INNER JOIN area a ON d.id_departamento = a.id_departamento
             INNER JOIN cargo c ON a.id_area = c.id_area
             """
-            conexion.cursor.execute(query)
+            conexion.cursor.execute(mostrar_comando)
             empleados = conexion.cursor.fetchall()
 
             if empleados:
@@ -155,6 +155,30 @@ class Empleado:
 
         except mysql.connector.Error as err:
             print(f"Algo salió mal: {err}")
+  
+    def actualizar_informacion_personal(self, id_filtrado):
+        try:
+            conexion = Conexion()
+            conexion.cursor.execute("USE empleados")
+
+            actualizar_comando = '''
+            UPDATE empleados
+            SET nombre = %s, rut = %s, sexo = %s, direccion = %s, telefono = %s   
+            WHERE id_empleado = %s   
+            '''
+            datos = (self.info_personal.nombre, self.info_personal.rut, self.info_personal.sexo, self.info_personal.direccion, self.info_personal.telefono, id_filtrado)
+
+            conexion.cursor.execute(actualizar_comando, datos)
+            conexion.conexion.commit()
+
+            print("La informacion personal del empleado ha sido actualizada con exito.")
+
+        except mysql.connector.Error as error:
+            conexion.conexion.rollback()
+            print(f"Ha ocurrido un error al intentar actualizar la informacion personal: {error}")
+
+        finally:
+            conexion.cerrar_conexion()      
 
     @staticmethod
     def obtener_id(rut):
@@ -169,11 +193,72 @@ class Empleado:
                 print("No fue posible encontrar al empleado con ese RUT. intenta de nuevo.")
                 return None, None
             else:
-                return id_filtrado[0]
+                print("Empleado encontrado con exito.")
+                return id_filtrado[0], None
             
         except Exception as error:
             print(f"Ha ocurrido un error al buscar al empleado {error}")
             return None, None
+
+        finally:
+            conexion.cerrar_conexion()
+
+    def obtener_empleado(id_empleado):
+        conexion = Conexion()
+        
+        try:
+            conexion.cursor.execute("USE empleados")
+            conexion.cursor.execute("SELECT * FROM empleados WHERE id_empleado = %s", (id_empleado,))
+            empleado_data = conexion.cursor.fetchone()
+
+            print("DATOS TABLA EMPLEADOS: ", empleado_data)
+
+            if empleado_data is None:
+                print("No fue posible encontrar al empleado con ese ID. Inténtalo de nuevo.")
+                return None
+
+            # Obtener la información personal del empleado
+            info_personal = InformacionPersonal(empleado_data[1], empleado_data[2], empleado_data[3], empleado_data[4], empleado_data[5])
+
+            # Obtener la información laboral del empleado
+            conexion.cursor.execute("SELECT * FROM informacion_laboral WHERE id_empleado = %s", (id_empleado,))
+            info_laboral_data = conexion.cursor.fetchone()
+
+            conexion.cursor.execute("SELECT * FROM departamento WHERE id_informacion_laboral = %s", (info_laboral_data[0],))
+            departamento_data = conexion.cursor.fetchone()
+
+            conexion.cursor.execute("SELECT * FROM area WHERE id_departamento = %s", (departamento_data[0],))
+            area_data = conexion.cursor.fetchone()
+
+            conexion.cursor.execute("SELECT * FROM cargo WHERE id_area = %s", (area_data[0],))
+            cargo_data = conexion.cursor.fetchone()
+
+            print("DATOS TABLA INFORMACION LABORAL", info_laboral_data)
+            print("DATOS TABLA DEPARTAMENTO", departamento_data)
+            print("DATOS TABLA AREA", area_data)
+            print("DATOS TABLA CARGO", cargo_data)
+
+            info_laboral = InformacionLaboral(info_laboral_data[1], departamento_data[1], area_data[1], cargo_data[1])
+
+            # Obtener el contacto de emergencia del empleado
+            conexion.cursor.execute("SELECT * FROM contactos_emergencia WHERE id_empleado = %s", (id_empleado,))
+            contacto_emergencia_data = conexion.cursor.fetchone()
+            contacto_emergencia = ContactoEmergencia(contacto_emergencia_data[1], contacto_emergencia_data[2], contacto_emergencia_data[3])
+
+            # Obtener las cargas familiares del empleado
+            conexion.cursor.execute("SELECT * FROM cargas_familiares WHERE id_empleado = %s", (id_empleado,))
+            cargas_familiares_data = conexion.cursor.fetchall()
+            cargas_familiares = []
+            for carga_data in cargas_familiares_data:
+                carga_familiar = CargaFamiliar(carga_data[1], carga_data[2], carga_data[3], carga_data[4])
+                cargas_familiares.append(carga_familiar)
+
+            empleado = Empleado(info_personal, info_laboral, contacto_emergencia, cargas_familiares)
+            return empleado
+
+        except Exception as error:
+            print(f"Ha ocurrido un error al obtener los datos del empleado: {error}")
+            return None
 
         finally:
             conexion.cerrar_conexion()

@@ -69,6 +69,17 @@ class RecopilarDatos:
             usuario = Usuario(nombre_usuario, clave, tipo_perfil)
 
         return usuario, id_empleado, rut_empleado
+    
+    def recoger_nueva_informacion_personal(self):
+        print("\n ACTUALIZACION DE INFORMACION PERSONAL")
+        nombre = solicitar_dato("Ingresa el nuevo nombre completo (o presiona enter para omitir)")
+        rut = solicitar_dato("Ingresa el nuevo RUT (12345678-9) (o presiona enter para omitir)")
+        sexo = solicitar_dato("Ingresa el nuevo sexo (o presiona enter para omitir)")
+        direccion = solicitar_dato("Ingresa la nueva direccion (o presiona enter para omitir)")
+        telefono = solicitar_dato("Ingresa el nuevo numero de telefono (o presiona enter para omitir)")
+        print("\n")
+
+        return nombre, rut, sexo, direccion, telefono
 
 
 
